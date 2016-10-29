@@ -357,7 +357,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Run
       takeName: Take 001
-      firstFrame: 28
+      firstFrame: 29
       lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
@@ -764,7 +764,7 @@ ModelImporter:
       name: Attack
       takeName: Take 001
       firstFrame: 86
-      lastFrame: 97
+      lastFrame: 100
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
