@@ -3,14 +3,17 @@ using System.Collections;
 
 public class Controller : MonoBehaviour {
 	Animator anim;
+//	public Animation attackClip;
+
 	public float speed = 10.0F;
 	public float rotationSpeed = 100.0F;
+
+	float attackLen = .467f;
 
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
-//		anim.GetCurrentAnimatorClipInfo(0).
-//			.IsName("Attack")
+		Debug.Log (anim.name /*["Attack"].length*/);
 	}
 	
 	// Update is called once per frame
@@ -63,6 +66,12 @@ public class Controller : MonoBehaviour {
 		if (Input.GetButtonDown ("Fire1")) {
 			anim.SetBool ("Attack", true);
 			anim.SetBool ("Idle", false);
+			Invoke ("stopAttack", attackLen);
 		}
+	}
+
+	void stopAttack() {
+		anim.SetBool ("Attack", false);
+		anim.SetBool ("Idle", true);
 	}
 }
