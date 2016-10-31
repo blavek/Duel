@@ -4,16 +4,64 @@ using System.Collections;
 public class enemyController : MonoBehaviour {
 	public float speed = 5f;
 	public GameObject pc;
+	public float chaseDist = 25f;
+	public float attackDist = 2f;
+	Animator anim;
+
+	Vector3 relVec;
+	float attackLen = .7f;
+	float attacking = 0;
 
 	// Use this for initialization
 	void Start () {
-	
+		relVec = pc.transform.position - transform.position;
+		anim = GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 relVec = pc.transform.position - transform.position;
-		float rot = Mathf.Atan2 (relVec.x, relVec.z) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.Euler(new Vector3 (0, rot, 0));
+		relVec = pc.transform.position - transform.position;
+		if (attacking <= 0) {
+			rotate ();
+			move ();
+			attack ();
+		} else {
+			attacking -= Time.deltaTime;
+		}
+	}
+
+	void rotate() {
+		if (relVec.magnitude <= chaseDist) {
+			float rot = Mathf.Atan2 (relVec.x, relVec.z) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.Euler (new Vector3 (0, rot, 0));
+		}
+	}
+
+	void move() {
+		if (relVec.magnitude <= chaseDist && relVec.magnitude > attackDist) {
+			float translation = speed * Time.deltaTime;
+			transform.Translate (new Vector3 (0, 0, translation));
+			anim.SetBool ("Idle", false);
+			anim.SetFloat ("Move", translation);
+		} else if (relVec.magnitude > chaseDist && relVec.magnitude > attackDist) {
+			anim.SetBool ("Idle", true);
+			anim.SetFloat ("Move", 0);
+		} else {
+			anim.SetFloat ("Move", 0);
+		}
+	}
+
+	void attack() {
+		if (relVec.magnitude <= attackDist) {
+			anim.SetBool ("Idle", false);
+			anim.SetBool ("Attack", true);
+			attacking = attackLen;
+			Invoke ("stopAttack", attackLen);
+		}
+	}
+
+	void stopAttack() {
+		anim.SetBool ("Attack", false);
+		anim.SetBool ("Idle", true);
 	}
 }
