@@ -5,36 +5,52 @@ public class cameraFollow : MonoBehaviour {
 	public GameObject target;
 	private int camHeightOffset = 10;
 	public int distanceOffset = 10;
-	public float lookSpeed = .1f;
+	public float rotSpeed = 1000f;
+	public float defRot = 180;
+	private float curRot;
 
 	// Use this for initialization
 	void Start () {
-		Vector3 tar = target.transform.position;
-		transform.position = new Vector3 (tar.x, tar.y + camHeightOffset, tar.z - distanceOffset);
-		transform.LookAt (tar);	
+		curRot = defRot;
+		updateCam ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		rotateCam ();
+	}
+
+	void rotateCam() {
 		float lX = Input.GetAxis ("LookX");
 		float lY = Input.GetAxis ("LookY");
 
-		Vector3 tar = target.transform.position;
-		transform.LookAt (tar);
+		Debug.Log ("Before Rot" + curRot);
 
-		if (Mathf.Abs (lX) < .1f && Mathf.Abs (lY) < .1f)
-			transform.position = new Vector3 (tar.x, tar.y + camHeightOffset, tar.z - distanceOffset);
-		else {
-			transform.RotateAround (tar, Vector3.up, lX * lookSpeed * Time.deltaTime);
-			Vector3 relVec = tar - transform.position;
-			if (relVec.magnitude > distanceOffset)
-				transform.Translate (Vector3.forward * 10 * Time.deltaTime);
-			else if(relVec.magnitude < distanceOffset)
-				transform.Translate (Vector3.back * 10 * Time.deltaTime);
+		if (Mathf.Abs (lX) < .1f && Mathf.Abs (lY) < .1f) {
+			if (curRot < defRot)
+				curRot += rotSpeed * Time.deltaTime;
+			else if (curRot > defRot)
+				curRot -= rotSpeed * Time.deltaTime;
+
+		} else {
+			curRot += lX * rotSpeed * Time.deltaTime;
 		}
 
+		curRot = Mathf.Round (curRot);
 
+		Debug.Log ("After Rot" + curRot);
+		updateCam ();
+	}
+	//		transform.LookAt (tar);
+	void updateCam() {
+		float x = Mathf.Sin (curRot * Mathf.Deg2Rad) * distanceOffset;
+		float z = Mathf.Cos (curRot * Mathf.Deg2Rad) * distanceOffset;
 
-//		transform.LookAt (tar);
+		Debug.Log ("x - " + x);
+		Debug.Log ("z - " + z);
+
+		transform.position = new Vector3 (Mathf.Lerp(x, x + target.transform.position.x, rotSpeed * Time.deltaTime), camHeightOffset, Mathf.Lerp(z,z + target.transform.position.z, rotSpeed * Time.deltaTime));
+
+		transform.LookAt (target.transform.position);	
 	}
 }
