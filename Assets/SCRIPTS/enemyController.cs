@@ -6,6 +6,10 @@ public class enemyController : MonoBehaviour {
 	public GameObject pc;
 	public float chaseDist = 25f;
 	public float attackDist = 2f;
+	public int startingHp = 20;
+	public GameObject self;
+	int HP;
+
 	Animator anim;
 
 	Vector3 relVec;
@@ -16,6 +20,7 @@ public class enemyController : MonoBehaviour {
 	void Start () {
 		relVec = pc.transform.position - transform.position;
 		anim = GetComponent<Animator> ();
+		HP = startingHp;
 	}
 	
 	// Update is called once per frame
@@ -63,5 +68,14 @@ public class enemyController : MonoBehaviour {
 	void stopAttack() {
 		anim.SetBool ("Attack", false);
 		anim.SetBool ("Idle", true);
+	}
+
+	public void damage (int dmg) {
+		HP -= dmg;
+
+		if (HP <= 0) {
+			Instantiate (self, new Vector3 (0, 0, 0), Quaternion.identity);
+			Destroy (gameObject);
+		}
 	}
 }

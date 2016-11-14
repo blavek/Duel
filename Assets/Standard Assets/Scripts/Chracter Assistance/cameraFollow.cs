@@ -16,15 +16,13 @@ public class cameraFollow : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void LateUpdate () {
 		rotateCam ();
 	}
 
 	void rotateCam() {
 		float lX = Input.GetAxis ("LookX");
 		float lY = Input.GetAxis ("LookY");
-
-		Debug.Log ("Before Rot" + curRot);
 
 		if (Mathf.Abs (lX) < .1f && Mathf.Abs (lY) < .1f) {
 			if (curRot < defRot)
@@ -36,18 +34,13 @@ public class cameraFollow : MonoBehaviour {
 			curRot += lX * rotSpeed * Time.deltaTime;
 		}
 
-		curRot = Mathf.Round (curRot);
-
-		Debug.Log ("After Rot" + curRot);
+		curRot = Mathf.FloorToInt (curRot);
 		updateCam ();
 	}
 	//		transform.LookAt (tar);
 	void updateCam() {
 		float x = Mathf.Sin (curRot * Mathf.Deg2Rad) * distanceOffset;
 		float z = Mathf.Cos (curRot * Mathf.Deg2Rad) * distanceOffset;
-
-		Debug.Log ("x - " + x);
-		Debug.Log ("z - " + z);
 
 		transform.position = new Vector3 (Mathf.Lerp(x, x + target.transform.position.x, rotSpeed * Time.deltaTime), camHeightOffset, Mathf.Lerp(z,z + target.transform.position.z, rotSpeed * Time.deltaTime));
 
