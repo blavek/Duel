@@ -3,7 +3,7 @@ using System.Collections;
 
 public class cameraFollow : MonoBehaviour {
 	public GameObject target;
-	private int camHeightOffset = 10;
+	public int camHeightOffset = 10;
 	public int distanceOffset = 10;
 	public float rotSpeed = 1000f;
 	public float defRot = 180;
