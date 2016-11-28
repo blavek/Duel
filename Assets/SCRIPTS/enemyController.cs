@@ -74,7 +74,7 @@ public class enemyController : MonoBehaviour {
 		HP -= dmg;
 
 		if (HP <= 0) {
-			Instantiate (self, new Vector3 (0, 0, 0), Quaternion.identity);
+			//Instantiate (self, new Vector3 (0, 0, 0), Quaternion.identity);
 			Destroy (gameObject);
 		}
 	}
