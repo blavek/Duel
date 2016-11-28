@@ -3,7 +3,7 @@ using System.Collections;
 
 public class enemyController : MonoBehaviour {
 	public float speed = 5f;
-	public GameObject pc;
+	GameObject pc;
 	public float chaseDist = 25f;
 	public float attackDist = 2f;
 	public int startingHp = 20;
@@ -18,6 +18,7 @@ public class enemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		pc = GameObject.FindGameObjectWithTag ("pc");
 		relVec = pc.transform.position - transform.position;
 		anim = GetComponent<Animator> ();
 		HP = startingHp;

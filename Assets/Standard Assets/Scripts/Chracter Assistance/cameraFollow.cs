@@ -24,17 +24,28 @@ public class cameraFollow : MonoBehaviour {
 		float lX = Input.GetAxis ("LookX");
 		float lY = Input.GetAxis ("LookY");
 
-		if (Mathf.Abs (lX) < .1f && Mathf.Abs (lY) < .1f) {
+		curRot = curRot % 360;
+
+		if (curRot < 0)
+			curRot += 360;
+		
+		if (Mathf.Abs (lX) > .1f) {
+			curRot += lX * rotSpeed * Time.deltaTime;
+		} else {
 			if (curRot < defRot)
 				curRot += rotSpeed * Time.deltaTime;
-			else if (curRot > defRot)
+
+			if (curRot > defRot)
 				curRot -= rotSpeed * Time.deltaTime;
 
-		} else {
-			curRot += lX * rotSpeed * Time.deltaTime;
+			if (Mathf.Abs (curRot - defRot) < 1) {
+				curRot = defRot;
+			}
 		}
 
-		curRot = Mathf.FloorToInt (curRot);
+
+
+		//curRot = Mathf.FloorToInt (curRot);
 		updateCam ();
 	}
 	//		transform.LookAt (tar);
@@ -42,7 +53,8 @@ public class cameraFollow : MonoBehaviour {
 		float x = Mathf.Sin (curRot * Mathf.Deg2Rad) * distanceOffset;
 		float z = Mathf.Cos (curRot * Mathf.Deg2Rad) * distanceOffset;
 
-		transform.position = new Vector3 (Mathf.Lerp(x, x + target.transform.position.x, rotSpeed * Time.deltaTime), camHeightOffset, Mathf.Lerp(z,z + target.transform.position.z, rotSpeed * Time.deltaTime));
+//		transform.position = new Vector3 (Mathf.Lerp(x, x + target.transform.position.x, rotSpeed * Time.deltaTime), camHeightOffset, Mathf.Lerp(z,z + target.transform.position.z, rotSpeed * Time.deltaTime));
+		transform.position = new Vector3 (x + target.transform.position.x, camHeightOffset, z + target.transform.position.z);
 
 		transform.LookAt (target.transform.position);	
 	}
