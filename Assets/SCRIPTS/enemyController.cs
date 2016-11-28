@@ -3,7 +3,6 @@ using System.Collections;
 
 public class enemyController : MonoBehaviour {
 	public float speed = 5f;
-	public GameObject pc;
 	public float chaseDist = 25f;
 	public float attackDist = 2f;
 	public int startingHp = 20;
@@ -11,6 +10,7 @@ public class enemyController : MonoBehaviour {
 	int HP;
 
 	Animator anim;
+	GameObject pc;
 
 	Vector3 relVec;
 	float attackLen = .7f;
@@ -18,14 +18,17 @@ public class enemyController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		pc = GameObject.FindGameObjectWithTag ("pc");
+
 		relVec = pc.transform.position - transform.position;
 		anim = GetComponent<Animator> ();
 		HP = startingHp;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		relVec = pc.transform.position - transform.position;
+		Debug.Log (": " + relVec.magnitude);
 		if (attacking <= 0) {
 			rotate ();
 			move ();
@@ -57,6 +60,7 @@ public class enemyController : MonoBehaviour {
 	}
 
 	void attack() {
+		Debug.Log ("Attacking");
 		if (relVec.magnitude <= attackDist) {
 			anim.SetBool ("Idle", false);
 			anim.SetBool ("Attack", true);
@@ -66,6 +70,7 @@ public class enemyController : MonoBehaviour {
 	}
 
 	void stopAttack() {
+		Debug.Log ("Stop Attacking");
 		anim.SetBool ("Attack", false);
 		anim.SetBool ("Idle", true);
 	}
