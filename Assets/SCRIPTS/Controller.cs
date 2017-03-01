@@ -22,29 +22,46 @@ public class Controller : MonoBehaviour {
 		attack ();
 	}
 
-	void move() {
+/*
+    void move() {
+        float rot = Input.GetAxis("Horizontal");
+        float vel = Input.GetAxis("Vertical");
+
+        if (Mathf.Abs(rot) < .1f)
+            rot = 0;
+
+        if (Mathf.Abs(vel) < .1f)
+            vel = 0;
+
+        float translation = speed * vel;
+
+    }
+*/
+    void move() {
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
 
-		if (Mathf.Abs(x) < .1f)
-			x = 0;
+//		if (Mathf.Abs(x) < .1f)
+//			x = 0;
 
-		if (Mathf.Abs(y) < .1f)
-			y = 0;
+//		if (Mathf.Abs(y) < .1f)
+//			y = 0;
 
 		float translation = speed * (Mathf.Sqrt((x*x) + (y*y)));
-		float rot = Mathf.Atan2 (x, y) * Mathf.Rad2Deg;
+        float rot = Mathf.Atan2 (x, y) * Mathf.Rad2Deg;
+
+        Debug.Log (rot + " x:" + x + " y:" + y);
+
+        if (x != 0 || y != 0)
+            transform.rotation = Quaternion.Euler (0, rot, 0);
 
 		translation *= Time.deltaTime;
 		transform.Translate(new Vector3(0, 0, translation));
 
-		if (Mathf.Abs (rot) > 0.1f)
-			transform.rotation = Quaternion.Euler (0, rot, 0);
-
 		animate (translation);
 	}
 
-	void animate (float translation) {
+    void animate (float translation) {
 		if (anim != null) {
 			anim.SetFloat ("Moving", translation);
 
