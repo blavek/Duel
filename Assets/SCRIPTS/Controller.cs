@@ -7,6 +7,9 @@ public class Controller : MonoBehaviour {
 
 	public float speed = 10.0F;
 	public float rotationSpeed = 100.0F;
+    public float jumpForce = 100f;
+
+//    private bool grounded = true;
 
 	float attackLen = .467f;
 
@@ -19,24 +22,20 @@ public class Controller : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		move ();
-		attack ();
+//		attack ();
+        playerInput ();
+//        stopJump ();
 	}
 
-/*
-    void move() {
-        float rot = Input.GetAxis("Horizontal");
-        float vel = Input.GetAxis("Vertical");
-
-        if (Mathf.Abs(rot) < .1f)
-            rot = 0;
-
-        if (Mathf.Abs(vel) < .1f)
-            vel = 0;
-
-        float translation = speed * vel;
-
+    void playerInput() {
+        if (Input.GetButtonDown ("Attack"))
+            attack ();
+            
+        if (Input.GetButtonDown ("Jump")) {
+            jump ();
+        }
     }
-*/
+
     void move() {
 		float x = Input.GetAxis("Horizontal");
 		float y = Input.GetAxis("Vertical");
@@ -80,15 +79,40 @@ public class Controller : MonoBehaviour {
 //			anim.SetBool ("Attack", false);
 //			anim.SetBool ("Idle", true);
 //		} else 
-		if (Input.GetButtonDown ("Fire1")) {
-			anim.SetBool ("Attack", true);
-			anim.SetBool ("Idle", false);
-			Invoke ("stopAttack", attackLen);
-		}
+		anim.SetBool ("Idle", false);
+        anim.SetBool ("Attack", true);
+		Invoke ("stopAttack", attackLen);
+
 	}
+
+    void jump () {
+        if (anim.GetBool("Grounded")) {
+            GetComponent<Rigidbody> ().AddForce (Vector3.up * jumpForce);
+            anim.SetBool ("Idle", false);
+            anim.SetBool ("Run", false);
+            anim.SetBool ("Grounded", false);
+        }
+
+    }
 
 	void stopAttack() {
 		anim.SetBool ("Attack", false);
 		anim.SetBool ("Idle", true);
 	}
+
+    void onCollisionEnter(Collision col) {
+        foreach (ContactPoint con in col.contacts) {
+            if (con.otherCollider.tag == "Ground") {
+                anim.SetBool("Grounded", true);
+            }
+        }
+    }
+
+    void onCollisionExit(Collision col) {
+        foreach (ContactPoint con in col.contacts) {
+            if (con.otherCollider.tag == "Ground") {
+                anim.SetBool("Grounded",false);
+            }
+        }
+    }
 }
