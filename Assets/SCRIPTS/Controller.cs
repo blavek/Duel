@@ -8,7 +8,9 @@ public class Controller : MonoBehaviour {
 	public float speed = 10.0F;
 	public float rotationSpeed = 100.0F;
     public float jumpForce = 100f;
+    public Reticle reticle;
 
+    private GameObject lockOnTarget = null;
 //    private bool grounded = true;
 
 	float attackLen = .467f;
@@ -21,11 +23,14 @@ public class Controller : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		move ();
+        if (lockOnTarget == null)
+            moveNoTarget ();
+        else
+            moveTarget ();
 //		attack ();
         playerInput ();
 //        stopJump ();
-		Debug.Log("Grounded: " + anim.GetBool("Grounded"));
+//		Debug.Log("Grounded: " + anim.GetBool("Grounded"));
 	}
 
     void playerInput() {
@@ -36,9 +41,13 @@ public class Controller : MonoBehaviour {
         if (Input.GetButtonDown ("Jump")) {
             jump ();
         }
+
+        if (Input.GetButtonDown ("LockOn")) {
+            lockOn ();
+        }
     }
 
-    void move() {
+    void moveNoTarget() {
 		float x = Input.GetAxis ("Horizontal");
 		float y = Input.GetAxis ("Vertical");
 
@@ -52,15 +61,19 @@ public class Controller : MonoBehaviour {
         float rot = Mathf.Atan2 (x, y) * Mathf.Rad2Deg;
 
 //        Debug.Log (rot + " x:" + x + " y:" + y);
+		translation *= Time.deltaTime;
+		transform.Translate(new Vector3(0, 0, translation));
 
         if (x != 0 || y != 0)
             transform.rotation = Quaternion.Euler (0, rot, 0);
 
-		translation *= Time.deltaTime;
-		transform.Translate(new Vector3(0, 0, translation));
-
 		animate (translation);
 	}
+
+    void moveTarget() {
+        float lx = Input.GetAxis ("Horizontal");
+        float ly = Input.GetAxis ("Vertical");
+    }
 
     void animate (float translation) {
 		if (anim != null) {
@@ -96,6 +109,30 @@ public class Controller : MonoBehaviour {
             anim.SetBool ("Grounded", false);
         }
 
+    }
+
+    void lockOn() {
+        Debug.Log ("LOCKON");
+        GameObject [] targets = GameObject.FindGameObjectsWithTag("Enemy");
+
+        if (targets.Length == 0)
+            return;
+
+        if (lockOnTarget == null && targets.Length > 0) {
+            lockOnTarget = targets [0];
+        }
+
+        transform.LookAt (lockOnTarget.transform);
+        reticle.gameObject.SetActive(true);
+        reticle.setTarget (lockOnTarget);
+        //else if (LockOnTarget != null && targets.Length > 0)
+        // if no target
+        //     Get Closest enemy within some range
+        // else
+        //     get Next Closest enemy
+
+        // face enemy
+        // place target on enemy
     }
 
 	void stopAttack() {
