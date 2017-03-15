@@ -11,6 +11,8 @@ public class Controller : MonoBehaviour {
     public Reticle reticle;
 
     private GameObject lockOnTarget = null;
+    private bool lockedOn = false;
+    private Rigidbody rBody;
 //    private bool grounded = true;
 
 	float attackLen = .467f;
@@ -18,17 +20,22 @@ public class Controller : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		anim = GetComponent<Animator> ();
+        rBody = GetComponent<Rigidbody> ();
 		Debug.Log (anim.name /*["Attack"].length*/);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (lockOnTarget == null)
+        if (!lockedOn)
             moveNoTarget ();
         else
             moveTarget ();
 //		attack ();
         playerInput ();
+
+        if (!anim.GetBool ("Grounded"))
+            jumpUpdate ();
+
 //        stopJump ();
 //		Debug.Log("Grounded: " + anim.GetBool("Grounded"));
 	}
@@ -43,7 +50,10 @@ public class Controller : MonoBehaviour {
         }
 
         if (Input.GetButtonDown ("LockOn")) {
-            lockOn ();
+            if (!lockedOn)
+                lockOn ();
+            else
+                lockOff ();
         }
     }
 
@@ -102,7 +112,7 @@ public class Controller : MonoBehaviour {
 
     void jump () {
         if (anim.GetBool("Grounded")) {
-            GetComponent<Rigidbody> ().AddForce (Vector3.up * jumpForce);
+            rBody.AddForce (Vector3.up * jumpForce);
 			anim.SetBool ("Jump", true);
             anim.SetBool ("Idle", false);
 //            anim.SetBool ("Run", false);
@@ -111,7 +121,13 @@ public class Controller : MonoBehaviour {
 
     }
 
+    void jumpUpdate() {
+        anim.SetFloat ("AirVel", rBody.velocity.y);
+        anim.SetFloat ("Height", rBody.position.y);            
+    }
+
     void lockOn() {
+        lockedOn = true;
         Debug.Log ("LOCKON");
         GameObject [] targets = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -125,6 +141,7 @@ public class Controller : MonoBehaviour {
         transform.LookAt (lockOnTarget.transform);
         reticle.gameObject.SetActive(true);
         reticle.setTarget (lockOnTarget);
+
         //else if (LockOnTarget != null && targets.Length > 0)
         // if no target
         //     Get Closest enemy within some range
@@ -133,6 +150,11 @@ public class Controller : MonoBehaviour {
 
         // face enemy
         // place target on enemy
+    }
+
+    void lockOff() {
+        lockedOn = false;
+        reticle.gameObject.SetActive(false);
     }
 
 	void stopAttack() {
