@@ -23,7 +23,7 @@ public class attack : MonoBehaviour {
 		AnimatorClipInfo [] clipInfo = GameObject.FindGameObjectWithTag ("pc").GetComponent<Animator> ().GetCurrentAnimatorClipInfo (0);
 
 		foreach (AnimatorClipInfo c in clipInfo) {
-			if (c.clip.name == "Attack") {
+			if (c.clip.name == "Attack 1") {
 				col.gameObject.GetComponent<enemyController> ().damage (10);
 				break;
 			}
