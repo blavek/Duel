@@ -7,19 +7,35 @@ public class cameraFollow : MonoBehaviour {
 	public int distanceOffset = 10;
 	public float rotSpeed = 1000f;
 	public float defRot = 180;
+	public float damping = 1;
 	private float curRot;
+	private Vector3 offset;
 
 	// Use this for initialization
 	void Start () {
         curRot = defRot; //target.transform.eulerAngles.y + 180;
-		updateCam ();
+		offset = target.transform.position - transform.position;// new Vector3(0, 5, 0);
+//		updateCam ();
 	}
 	
 	// Update is called once per frame
 	void LateUpdate () {
-		rotateCam ();
+		followCam ();		
+//		rotateCam ();
 	}
 
+	void followCam() {
+		float curAngle = transform.eulerAngles.y;
+		float desAngle = target.transform.eulerAngles.y;
+		float angle = Mathf.LerpAngle (curAngle, desAngle, Time.deltaTime * damping);
+
+
+		Quaternion rotation = Quaternion.Euler(0, angle, 0);
+		transform.position = target.transform.position - (rotation * offset);
+		transform.LookAt (target.transform.position);
+	}
+/*
+	/// </summary>
 	void rotateCam() {
         float lX = Input.GetAxis ("LookX");
 		float lY = Input.GetAxis ("LookY");
@@ -56,4 +72,4 @@ public class cameraFollow : MonoBehaviour {
 
 		transform.LookAt (target.transform.position);	
 	}
-}
+*/}

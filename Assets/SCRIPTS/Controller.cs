@@ -68,7 +68,9 @@ public class Controller : MonoBehaviour {
 //			y = 0;
 
 		float translation = speed * (Mathf.Sqrt((x*x) + (y*y)));
-        float rot = Mathf.Atan2 (x, y) * Mathf.Rad2Deg;
+		float rot = (Mathf.Atan2 (x, y) * Mathf.Rad2Deg) + transform.eulerAngles.y;
+		rot = Mathf.LerpAngle (transform.eulerAngles.y, rot, rotationSpeed * Time.deltaTime);
+//		rot = Camera.main.transform.TransformDirection(new Vector3 (0, rot, 0));
 
 //        Debug.Log (rot + " x:" + x + " y:" + y);
 		translation *= Time.deltaTime;
