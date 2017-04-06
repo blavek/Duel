@@ -85,6 +85,12 @@ public class Controller : MonoBehaviour {
     void moveTarget() {
         float lx = Input.GetAxis ("Horizontal");
         float ly = Input.GetAxis ("Vertical");
+
+        float translation = speed * ly * Time.deltaTime;
+
+        transform.Translate(new Vector3(0, 0, translation));
+
+        animate (translation);
     }
 
     void animate (float translation) {
