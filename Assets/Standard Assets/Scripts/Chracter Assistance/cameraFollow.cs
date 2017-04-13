@@ -6,9 +6,9 @@ public class cameraFollow : MonoBehaviour {
 	public int camHeightOffset = 10;
 	public int distanceOffset = 10;
 
-/*
- * public float rotSpeed = 1000f;
-	public float defRot = 180;
+	public float rotSpeed = 1000f;
+/*	
+   	public float defRot = 180;
 	public float damping = 1;
 	private float curRot;
 */
@@ -35,8 +35,10 @@ public class cameraFollow : MonoBehaviour {
 	void followCam() {
 		float curAngle = transform.eulerAngles.y;
 		float desAngle = target.transform.eulerAngles.y;
+		float lX = Input.GetAxis ("LookX");
+//		desAngle += lX * rotSpeed;
 		float angle = Mathf.LerpAngle (curAngle, desAngle, Time.deltaTime * damping);
-
+		angle += lX * rotSpeed;
 
 		Quaternion rotation = Quaternion.Euler(0, angle, 0);
 		transform.position = target.transform.position - (rotation * offset);

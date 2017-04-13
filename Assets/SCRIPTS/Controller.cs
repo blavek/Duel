@@ -199,6 +199,7 @@ public class Controller : MonoBehaviour {
             if (con.otherCollider.tag == "Ground") {
                 anim.SetBool ("Grounded", true);
 				anim.SetBool ("Jump", false);
+				anim.SetFloat ("Height", 0); 
             }
         }
     }
