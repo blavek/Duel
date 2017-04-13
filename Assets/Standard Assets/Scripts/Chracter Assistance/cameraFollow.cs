@@ -3,10 +3,11 @@ using System.Collections;
 
 public class cameraFollow : MonoBehaviour {
 	public GameObject target;
-/*
- * public int camHeightOffset = 10;
+	public int camHeightOffset = 10;
 	public int distanceOffset = 10;
-	public float rotSpeed = 1000f;
+
+/*
+ * public float rotSpeed = 1000f;
 	public float defRot = 180;
 	public float damping = 1;
 	private float curRot;
@@ -16,9 +17,13 @@ public class cameraFollow : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-  //      curRot = defRot; //target.transform.eulerAngles.y + 180;
-		offset = target.transform.position - transform.position;// new Vector3(0, 5, 0);
-//		updateCam ();
+		transform.LookAt (target.transform.position);
+		transform.rotation = target.transform.rotation;
+		transform.position = target.transform.position;
+		transform.position = transform.position + new Vector3 (0, camHeightOffset, -distanceOffset);
+  		offset = target.transform.position - transform.position;// new Vector3(0, 5, 0);
+
+		//		updateCam ();
 	}
 	
 	// Update is called once per frame

@@ -53,6 +53,7 @@ public class Controller : MonoBehaviour {
 		}
             
         if (Input.GetButtonDown ("Jump")) {
+			Debug.Log ("JUMP");
             jump ();
         }
 
@@ -85,7 +86,7 @@ public class Controller : MonoBehaviour {
 //		rot = Mathf.LerpAngle (transform.eulerAngles.y, rot, rotationSpeed * Time.deltaTime);
 //		rot = Camera.main.transform.TransformDirection(new Vector3 (0, rot, 0));
 
-        Debug.Log ("CamRot: " + camRot + "JoyRot: " + joyRot + " x:" + x + " y:" + y);
+//        Debug.Log ("CamRot: " + camRot + "JoyRot: " + joyRot + " x:" + x + " y:" + y);
 
 		translation *= Time.deltaTime;
 		transform.Translate(new Vector3(0, 0, translation));
@@ -159,7 +160,7 @@ public class Controller : MonoBehaviour {
 
     void lockOn() {
         lockedOn = true;
-        Debug.Log ("LOCKON");
+ //       Debug.Log ("LOCKON");
         GameObject [] targets = GameObject.FindGameObjectsWithTag("Enemy");
 
         if (targets.Length == 0)
