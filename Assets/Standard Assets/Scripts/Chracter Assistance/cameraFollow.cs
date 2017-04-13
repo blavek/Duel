@@ -11,7 +11,7 @@ public class cameraFollow : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		curRot = defRot;
+        curRot = defRot; //target.transform.eulerAngles.y + 180;
 		updateCam ();
 	}
 	
@@ -21,7 +21,7 @@ public class cameraFollow : MonoBehaviour {
 	}
 
 	void rotateCam() {
-		float lX = Input.GetAxis ("LookX");
+        float lX = Input.GetAxis ("LookX");
 		float lY = Input.GetAxis ("LookY");
 
 		curRot = curRot % 360;
@@ -43,9 +43,7 @@ public class cameraFollow : MonoBehaviour {
 			}
 		}
 
-
-
-		//curRot = Mathf.FloorToInt (curRot);
+//        curRot = target.transform.eulerAngles.y + 180; //Mathf.FloorToInt (curRot);
 		updateCam ();
 	}
 	//		transform.LookAt (tar);
