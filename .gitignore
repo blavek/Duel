@@ -81,3 +81,11 @@ Assets/Material/PlayerArmor.mat.meta
 Assets/Material/PlayerArmor.mat
 Assets/Prefebs.meta
 Assets/FBX IMPPORTS/Objects/Materials.meta~Camera Updates
+Assets/FBX IMPPORTS/Player Character/ArmoredPlayerBody_MappedUVW+Animation_Revised1.FBX.meta
+Assets/FBX IMPPORTS/Player Character/PlayerRevised.controller
+Assets/FBX IMPPORTS/Player Character/PlayerRevised_Final.prefab
+Assets/SCRIPTS/Controller.cs
+Assets/Standard Assets/Scripts/Chracter Assistance/cameraFollow.cs
+Assets/_SCENES/default.unity
+Assets/_SCENES/gameTerrain.unity
+Assets/_SCENES/gameTerrain.unity
