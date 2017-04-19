@@ -3,16 +3,12 @@ using System.Collections;
 
 public class attack : MonoBehaviour {
 	Collider c;
-//	public Animation anim;
+	public Animation anim;
 	// Use this for initialization
 	void Start () {
 		c = GetComponent<Collider> ();
-/*
-        anim = GameObject.FindGameObjectWithTag("pc").GetComponent<Animation> ();
-        if (anim == null)
-            Debug.Log ("No ANim");
-*/
-    }
+		anim = GameObject.FindGameObjectWithTag("pc").GetComponent<Animation> ();
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -20,16 +16,18 @@ public class attack : MonoBehaviour {
 	}
 
 	void OnCollisionEnter (Collision col) {
-//		Debug.Log (col.gameObject.name);
-        bool attacking = GameObject.FindGameObjectWithTag ("pc").GetComponentInParent<Controller>().getAttackState ();
-//        player.getAttackState();
+		Debug.Log (col.gameObject.name);
 
-        if (attacking) {
-            if (col.gameObject.GetComponent<enemyController> () != null)
-                col.gameObject.GetComponent<enemyController> ().damage (10);
+		//if (GameObject.FindGameObjectWithTag("pc").GetComponent<Animator> ().GetCurrentAnimatorClipInfo(0))//. IsPlaying("Attack"))
 
-            if (col.gameObject.GetComponent<BirdController> () != null)
-                col.gameObject.GetComponent<BirdController> ().damage (10);
+		AnimatorClipInfo [] clipInfo = GameObject.FindGameObjectWithTag ("pc").GetComponent<Animator> ().GetCurrentAnimatorClipInfo (0);
+
+		foreach (AnimatorClipInfo c in clipInfo) {
+			if (c.clip.name == "Attack 1") {
+				col.gameObject.GetComponent<enemyController> ().damage (10);
+				break;
+			}
 		}
 	}
+
 }

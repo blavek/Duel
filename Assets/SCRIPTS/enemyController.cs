@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
 public class enemyController : MonoBehaviour {
 	public float speed = 5f;
@@ -10,7 +9,6 @@ public class enemyController : MonoBehaviour {
 	public int startingHp = 20;
 	public GameObject self;
 	int HP;
-    public Slider healthBar;
 
 	Animator anim;
 
@@ -24,9 +22,7 @@ public class enemyController : MonoBehaviour {
 		relVec = pc.transform.position - transform.position;
 		anim = GetComponent<Animator> ();
 		HP = startingHp;
-        healthBar.maxValue = startingHp;
-        healthBar.value = HP;
-    }
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -77,7 +73,6 @@ public class enemyController : MonoBehaviour {
 
 	public void damage (int dmg) {
 		HP -= dmg;
-        healthBar.value = HP;
 
 		if (HP <= 0) {
 			//Instantiate (self, new Vector3 (0, 0, 0), Quaternion.identity);
