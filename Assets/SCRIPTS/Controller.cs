@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Controller : MonoBehaviour {
 	Animator anim;
@@ -9,10 +11,29 @@ public class Controller : MonoBehaviour {
 	public float rotationSpeed = 100.0F;
     public float jumpForce = 100f;
     public Reticle reticle;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	public float attackDistance = 2;
+=======
+>>>>>>> master
+>>>>>>> Brian
 
     private GameObject lockOnTarget = null;
     private bool lockedOn = false;
     private Rigidbody rBody;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    private GameObject cam = null;
+    private bool attacking = false;
+=======
+<<<<<<< HEAD
+	private GameObject cam = null;
+=======
+>>>>>>> master
+>>>>>>> origin/Brian
+>>>>>>> Brian
 //    private bool grounded = true;
 
 	float attackLen = .467f;
@@ -21,11 +42,66 @@ public class Controller : MonoBehaviour {
 	void Start () {
 		anim = GetComponent<Animator> ();
         rBody = GetComponent<Rigidbody> ();
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+		cam = GameObject.FindGameObjectWithTag ("MainCamera");
+=======
+>>>>>>> master
+>>>>>>> Brian
 		Debug.Log (anim.name /*["Attack"].length*/);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+<<<<<<< HEAD
+        if (!lockedOn)
+=======
+<<<<<<< HEAD
+		if (lockOnTarget == null) {
+			lockOff ();
+		}
+
+		if (!lockedOn)
+>>>>>>> Brian
+            moveNoTarget ();
+        else
+            moveTarget ();
+//		attack ();
+        playerInput ();
+
+        if (!anim.GetBool ("Grounded"))
+            jumpUpdate ();
+
+//        stopJump ();
+//		Debug.Log("Grounded: " + anim.GetBool("Grounded"));
+	}
+
+    void playerInput() {
+		if (Input.GetButtonDown ("Attack")) {
+			attack ();
+		}
+            
+        if (Input.GetButtonDown ("Jump")) {
+			Debug.Log ("JUMP");
+            jump ();
+        }
+
+        if (Input.GetButtonDown ("LockOn")) {
+            if (!lockedOn)
+                lockOn ();
+            else
+                lockOff ();
+        }
+    }
+
+    void moveNoTarget() {
+		float x = Input.GetAxis ("Horizontal");
+		float y = Input.GetAxis ("Vertical");
+
+<<<<<<< HEAD
+=======
+=======
         if (!lockedOn)
             moveNoTarget ();
         else
@@ -61,6 +137,8 @@ public class Controller : MonoBehaviour {
 		float x = Input.GetAxis ("Horizontal");
 		float y = Input.GetAxis ("Vertical");
 
+>>>>>>> master
+>>>>>>> Brian
 //		if (Mathf.Abs(x) < .1f)
 //			x = 0;
 
@@ -68,7 +146,25 @@ public class Controller : MonoBehaviour {
 //			y = 0;
 
 		float translation = speed * (Mathf.Sqrt((x*x) + (y*y)));
+<<<<<<< HEAD
         float rot = Mathf.Atan2 (x, y) * Mathf.Rad2Deg;
+=======
+<<<<<<< HEAD
+		float joyRot = ((Mathf.Atan2 (x, y) * Mathf.Rad2Deg) + 360) % 360;
+		float camRot = cam.transform.eulerAngles.y;
+		float rot = (joyRot + camRot) % 360;
+
+//		Vector3 rot = y * cam.transform.forward + x * cam.transform.right;
+
+
+//		rot = Mathf.LerpAngle (transform.eulerAngles.y, rot, rotationSpeed * Time.deltaTime);
+//		rot = Camera.main.transform.TransformDirection(new Vector3 (0, rot, 0));
+
+//        Debug.Log ("CamRot: " + camRot + "JoyRot: " + joyRot + " x:" + x + " y:" + y);
+=======
+        float rot = Mathf.Atan2 (x, y) * Mathf.Rad2Deg;
+>>>>>>> master
+>>>>>>> Brian
 
 //        Debug.Log (rot + " x:" + x + " y:" + y);
 		translation *= Time.deltaTime;
@@ -83,6 +179,43 @@ public class Controller : MonoBehaviour {
     void moveTarget() {
         float lx = Input.GetAxis ("Horizontal");
         float ly = Input.GetAxis ("Vertical");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+/*
+        Vector3 targetDir = lockOnTarget.transform.position - transform.position;
+        targetDir.Set (targetDir.x, 0, targetDir.z);
+        float angle = Vector3.Angle(targetDir, transform.forward);
+        transform.Rotate (new Vector3 (0, angle, 0));
+*/
+        face (lockOnTarget);
+//		transform.LookAt (lockOnTarget.transform);
+=======
+<<<<<<< HEAD
+		transform.LookAt (lockOnTarget.transform);
+>>>>>>> origin/Brian
+//		transform.rotation = new Quaternion (0, transform.rotation.y, 0, 0);
+
+		float yTranslation = speed * ly * Time.deltaTime;
+
+		if (Vector3.Distance (transform.position, lockOnTarget.transform.position) < attackDistance && yTranslation > 0)
+			yTranslation = 0;
+		
+		float xTranslation = speed * lx * Time.deltaTime;
+
+        transform.Translate(new Vector3(xTranslation, 0, yTranslation));
+
+		float translation = xTranslation > yTranslation ? xTranslation : yTranslation;
+
+        animate (translation);
+<<<<<<< HEAD
+//        face (lockOnTarget);
+=======
+=======
+>>>>>>> master
+>>>>>>> origin/Brian
+>>>>>>> Brian
     }
 
     void animate (float translation) {
@@ -100,12 +233,9 @@ public class Controller : MonoBehaviour {
 	}
 
 	void attack() {
-//		if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Attack") && !Input.GetButtonDown ("Fire1")) {
-//			anim.SetBool ("Attack", false);
-//			anim.SetBool ("Idle", true);
-//		} else 
 		anim.SetBool ("Idle", false);
         anim.SetBool ("Attack", true);
+        attacking = true;
 		Invoke ("stopAttack", attackLen);
 
 	}
@@ -128,28 +258,40 @@ public class Controller : MonoBehaviour {
 
     void lockOn() {
         lockedOn = true;
+<<<<<<< HEAD
         Debug.Log ("LOCKON");
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+ //       Debug.Log ("LOCKON");
+=======
+        Debug.Log ("LOCKON");
+>>>>>>> master
+>>>>>>> Brian
         GameObject [] targets = GameObject.FindGameObjectsWithTag("Enemy");
+>>>>>>> origin/Brian
 
-        if (targets.Length == 0)
+        List<GameObject> targets = new List<GameObject>();
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        foreach (GameObject g in enemies) {
+            targets.Add (g);
+        }
+
+        if (targets.Count == 0)
             return;
 
-        if (lockOnTarget == null && targets.Length > 0) {
+        targets = targets.OrderBy (x => Vector3.Distance (this.transform.position, x.transform.position)).ToList ();
+
+        if (targets.Count > 0) {
             lockOnTarget = targets [0];
         }
 
-        transform.LookAt (lockOnTarget.transform);
+        face (lockOnTarget);
+
         reticle.gameObject.SetActive(true);
         reticle.setTarget (lockOnTarget);
-
-        //else if (LockOnTarget != null && targets.Length > 0)
-        // if no target
-        //     Get Closest enemy within some range
-        // else
-        //     get Next Closest enemy
-
-        // face enemy
-        // place target on enemy
     }
 
     void lockOff() {
@@ -160,6 +302,7 @@ public class Controller : MonoBehaviour {
 	void stopAttack() {
 		anim.SetBool ("Attack", false);
 		anim.SetBool ("Idle", true);
+        attacking = false;
 	}
 
     void OnCollisionEnter(Collision col) {
@@ -177,5 +320,16 @@ public class Controller : MonoBehaviour {
                 anim.SetBool("Grounded",false);
             }
         }
+    }
+
+    public bool getAttackState() {
+        return (attacking);
+    }
+
+    void face(GameObject tar) {
+        Vector3 lookPos = tar.transform.position - transform.position;
+        lookPos.y = 0;
+        Quaternion rotation = Quaternion.LookRotation(lookPos);
+        transform.rotation = rotation; //Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
     }
 }
