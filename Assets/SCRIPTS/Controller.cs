@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour {
 		cam = GameObject.FindGameObjectWithTag ("MainCamera");
 		Debug.Log (anim.name /*["Attack"].length*/);
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (lockOnTarget == null) {
@@ -43,7 +43,7 @@ public class Controller : MonoBehaviour {
 //		attack ();
         playerInput ();
 
-        if (!anim.GetBool ("Grounded"))
+        if (!anim.GetBool ("Grounded") || anim.GetFloat ("Height") > 0)
             jumpUpdate ();
 
 //        stopJump ();
@@ -54,7 +54,7 @@ public class Controller : MonoBehaviour {
 		if (Input.GetButtonDown ("Attack")) {
 			attack ();
 		}
-            
+
         if (Input.GetButtonDown ("Jump")) {
 			Debug.Log ("JUMP");
             jump ();
@@ -118,7 +118,7 @@ public class Controller : MonoBehaviour {
 
 		if (Vector3.Distance (transform.position, lockOnTarget.transform.position) < attackDistance && yTranslation > 0)
 			yTranslation = 0;
-		
+
 		float xTranslation = speed * lx * Time.deltaTime;
 
         transform.Translate(new Vector3(xTranslation, 0, yTranslation));
@@ -164,7 +164,15 @@ public class Controller : MonoBehaviour {
 
     void jumpUpdate() {
         anim.SetFloat ("AirVel", rBody.velocity.y);
-        anim.SetFloat ("Height", rBody.position.y);            
+        float height = rBody.position.y;
+
+        RaycastHit hit;
+        if (Physics.Raycast (transform.position, Vector3.down, out hit))
+            height = hit.distance;
+        else
+            height = 0;
+
+        anim.SetFloat ("Height", height);
     }
 
     void lockOn() {
