@@ -17,7 +17,6 @@ public class cameraFollow : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-<<<<<<< HEAD
 		transform.LookAt (target.transform.position);
 		transform.rotation = target.transform.rotation;
 		transform.position = target.transform.position;
@@ -25,10 +24,6 @@ public class cameraFollow : MonoBehaviour {
   		offset = target.transform.position - transform.position;// new Vector3(0, 5, 0);
 
 		//		updateCam ();
-=======
-        curRot = defRot; //target.transform.eulerAngles.y + 180;
-		updateCam ();
->>>>>>> master
 	}
 	
 	// Update is called once per frame

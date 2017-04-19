@@ -11,23 +11,13 @@ public class Controller : MonoBehaviour {
 	public float rotationSpeed = 100.0F;
     public float jumpForce = 100f;
     public Reticle reticle;
-<<<<<<< HEAD
 	public float attackDistance = 2;
-=======
->>>>>>> master
 
     private GameObject lockOnTarget = null;
     private bool lockedOn = false;
     private Rigidbody rBody;
-<<<<<<< HEAD
     private GameObject cam = null;
     private bool attacking = false;
-=======
-<<<<<<< HEAD
-	private GameObject cam = null;
-=======
->>>>>>> master
->>>>>>> origin/Brian
 //    private bool grounded = true;
 
 	float attackLen = .467f;
@@ -36,16 +26,12 @@ public class Controller : MonoBehaviour {
 	void Start () {
 		anim = GetComponent<Animator> ();
         rBody = GetComponent<Rigidbody> ();
-<<<<<<< HEAD
 		cam = GameObject.FindGameObjectWithTag ("MainCamera");
-=======
->>>>>>> master
 		Debug.Log (anim.name /*["Attack"].length*/);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-<<<<<<< HEAD
 		if (lockOnTarget == null) {
 			lockOff ();
 		}
@@ -86,43 +72,6 @@ public class Controller : MonoBehaviour {
 		float x = Input.GetAxis ("Horizontal");
 		float y = Input.GetAxis ("Vertical");
 
-=======
-        if (!lockedOn)
-            moveNoTarget ();
-        else
-            moveTarget ();
-//		attack ();
-        playerInput ();
-
-        if (!anim.GetBool ("Grounded"))
-            jumpUpdate ();
-
-//        stopJump ();
-//		Debug.Log("Grounded: " + anim.GetBool("Grounded"));
-	}
-
-    void playerInput() {
-		if (Input.GetButtonDown ("Attack")) {
-			attack ();
-		}
-            
-        if (Input.GetButtonDown ("Jump")) {
-            jump ();
-        }
-
-        if (Input.GetButtonDown ("LockOn")) {
-            if (!lockedOn)
-                lockOn ();
-            else
-                lockOff ();
-        }
-    }
-
-    void moveNoTarget() {
-		float x = Input.GetAxis ("Horizontal");
-		float y = Input.GetAxis ("Vertical");
-
->>>>>>> master
 //		if (Mathf.Abs(x) < .1f)
 //			x = 0;
 
@@ -130,7 +79,6 @@ public class Controller : MonoBehaviour {
 //			y = 0;
 
 		float translation = speed * (Mathf.Sqrt((x*x) + (y*y)));
-<<<<<<< HEAD
 		float joyRot = ((Mathf.Atan2 (x, y) * Mathf.Rad2Deg) + 360) % 360;
 		float camRot = cam.transform.eulerAngles.y;
 		float rot = (joyRot + camRot) % 360;
@@ -142,11 +90,7 @@ public class Controller : MonoBehaviour {
 //		rot = Camera.main.transform.TransformDirection(new Vector3 (0, rot, 0));
 
 //        Debug.Log ("CamRot: " + camRot + "JoyRot: " + joyRot + " x:" + x + " y:" + y);
-=======
-        float rot = Mathf.Atan2 (x, y) * Mathf.Rad2Deg;
->>>>>>> master
 
-//        Debug.Log (rot + " x:" + x + " y:" + y);
 		translation *= Time.deltaTime;
 		transform.Translate(new Vector3(0, 0, translation));
 
@@ -159,7 +103,6 @@ public class Controller : MonoBehaviour {
     void moveTarget() {
         float lx = Input.GetAxis ("Horizontal");
         float ly = Input.GetAxis ("Vertical");
-<<<<<<< HEAD
 
 /*
         Vector3 targetDir = lockOnTarget.transform.position - transform.position;
@@ -169,10 +112,6 @@ public class Controller : MonoBehaviour {
 */
         face (lockOnTarget);
 //		transform.LookAt (lockOnTarget.transform);
-=======
-<<<<<<< HEAD
-		transform.LookAt (lockOnTarget.transform);
->>>>>>> origin/Brian
 //		transform.rotation = new Quaternion (0, transform.rotation.y, 0, 0);
 
 		float yTranslation = speed * ly * Time.deltaTime;
@@ -187,12 +126,7 @@ public class Controller : MonoBehaviour {
 		float translation = xTranslation > yTranslation ? xTranslation : yTranslation;
 
         animate (translation);
-<<<<<<< HEAD
 //        face (lockOnTarget);
-=======
-=======
->>>>>>> master
->>>>>>> origin/Brian
     }
 
     void animate (float translation) {
@@ -235,15 +169,6 @@ public class Controller : MonoBehaviour {
 
     void lockOn() {
         lockedOn = true;
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
- //       Debug.Log ("LOCKON");
-=======
-        Debug.Log ("LOCKON");
->>>>>>> master
-        GameObject [] targets = GameObject.FindGameObjectsWithTag("Enemy");
->>>>>>> origin/Brian
 
         List<GameObject> targets = new List<GameObject>();
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
