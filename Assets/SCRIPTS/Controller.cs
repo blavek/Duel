@@ -69,8 +69,8 @@ public class Controller : MonoBehaviour {
     }
 
     void moveNoTarget() {
-		float x = Input.GetAxis ("Horizontal");
-		float y = Input.GetAxis ("Vertical");
+		float x = Input.GetAxis ("MoveX");
+		float y = Input.GetAxis ("MoveY");
 
 //		if (Mathf.Abs(x) < .1f)
 //			x = 0;
@@ -101,8 +101,8 @@ public class Controller : MonoBehaviour {
 	}
 
     void moveTarget() {
-        float lx = Input.GetAxis ("Horizontal");
-        float ly = Input.GetAxis ("Vertical");
+        float lx = Input.GetAxis ("MoveX");
+        float ly = Input.GetAxis ("MoveY");
 
 /*
         Vector3 targetDir = lockOnTarget.transform.position - transform.position;
@@ -194,10 +194,9 @@ public class Controller : MonoBehaviour {
             lockOnTarget = targets [0];
         }
 
-        face (lockOnTarget);
-
-        reticle.gameObject.SetActive(true);
         reticle.setTarget (lockOnTarget);
+        reticle.gameObject.SetActive(true);
+        face (lockOnTarget);
     }
 
     void lockOff() {

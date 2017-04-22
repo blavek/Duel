@@ -105,7 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   camHeightOffset: 5
-  distanceOffset: 10
+  distanceOffset: 15
   damping: 1
 --- !u!124 &124000012728137802
 Behaviour:
