@@ -3,7 +3,9 @@ using System.Collections;
 
 public class attack : MonoBehaviour {
     public Controller player;
+    public int wpnDmg = 10;
 
+    private int frame = 0;
     Collider c;
 //	public Animation anim;
 	// Use this for initialization
@@ -19,18 +21,38 @@ public class attack : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		c.transform.rotation = transform.rotation;
+        frame++;
 	}
 
-	void OnCollisionEnter (Collision col) {
-//		Debug.Log (col.collider);
+    //      Debug.Log (col.collider);
+    void weaponHit (Collision col) {
         bool attacking = player.getAttackState ();
 
         if (attacking) {
-            if (col.gameObject.GetComponent<enemyController> () != null)
-                col.gameObject.GetComponent<enemyController> ().damage (10);
+            if (col.gameObject.GetComponent<enemyController> () != null && !player.getAttacked ()) {
+                col.gameObject.GetComponent<enemyController> ().damage (wpnDmg);
+                player.setAttacked ();
+            }
 
-            if (col.gameObject.GetComponent<BirdController> () != null)
-                col.gameObject.GetComponent<BirdController> ().damage (10);
-		}
+            if (col.gameObject.GetComponent<BirdController> () != null && !player.getAttacked ()) {
+                col.gameObject.GetComponent<BirdController> ().damage (wpnDmg);
+                player.setAttacked ();
+            }
+
+            if (col.gameObject.GetComponent<dragonBoss> () != null && !player.getAttacked()) {
+                col.gameObject.GetComponent<dragonBoss> ().damage (wpnDmg);
+                player.setAttacked ();
+            }
+        }
+    }
+
+
+
+	void OnCollisionEnter (Collision col) {
+        weaponHit (col);
 	}
+
+    void OnCollisionStay (Collision col) {
+        weaponHit (col);
+    }
 }

@@ -15,6 +15,7 @@ public class enemyController : MonoBehaviour {
     public float deathAnimLength = 3f;
     public HealthPickup vial;
     public float dropPercentage = .2f;
+    public float attackDelay = 3f;
 
 	Animator anim;
 
@@ -22,6 +23,7 @@ public class enemyController : MonoBehaviour {
 	float attackLen = .533f;
 	bool attacking = false;
     private bool drops = true;
+    private float tSinceAttack = 0;
 
     private CharacterController charCont;
 
@@ -47,7 +49,7 @@ public class enemyController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (isAlive ()) {
-            relVec = pc.transform.position - transform.position;
+            relVec = new Vector3(pc.transform.position.x, 0, pc.transform.position.z) - new Vector3(transform.position.x, 0, transform.position.z);
             if (!attacking) {
                 rotate ();
                 move ();
@@ -75,21 +77,26 @@ public class enemyController : MonoBehaviour {
 			anim.SetFloat ("Move", 0);
 		} else {
 			anim.SetFloat ("Move", 0);
+            anim.SetBool ("Idle", true);
 		}
 	}
 
 	void attack() {
-		if (relVec.magnitude <= attackDist) {
-			anim.SetBool ("Idle", false);
-			anim.SetBool ("Attack", true);
+        if (relVec.magnitude <= attackDist && tSinceAttack >= attackDelay && !attacking) {
+            anim.SetBool ("Idle", false);
+            anim.SetTrigger ("Attack");
+//            anim.SetBool ("Attack", true);
             attacking = true; //attackLen;
-			Invoke ("stopAttack", attackLen);
-		}
+            Invoke ("stopAttack", attackLen);
+        } else {
+            tSinceAttack += Time.deltaTime;
+        }
 	}
 
 	void stopAttack() {
+        tSinceAttack = 0;
         attacking = false;
-		anim.SetBool ("Attack", false);
+//		anim.SetBool ("Attack", false);
 		anim.SetBool ("Idle", true);
 	}
 

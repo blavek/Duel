@@ -41,4 +41,8 @@ public class PauseGame : MonoBehaviour {
     public void exitGame() {
         Application.Quit ();
     }
+
+	public void startGame() {
+		SceneManager.LoadSceneAsync (1, LoadSceneMode.Single);
+	}
 }

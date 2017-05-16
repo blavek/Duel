@@ -16,9 +16,11 @@ public class Controller : MonoBehaviour {
     public AudioClip[] slashes;
     public float maxHp = 200;
     public Canvas gameOverCan;
-
-
+    public Image healthbarFill;
+    public float attackDelay = .5f;
     public Slider healthBar;
+
+    private float tSinceAttack = 0f;
     private GameObject lockOnTarget = null;
     private bool lockedOn = false;
     private Rigidbody rBody;
@@ -31,6 +33,7 @@ public class Controller : MonoBehaviour {
     private CharacterController charCont;
     private float gravity = 0;
     private Vector3 jumpHeight = Vector3.zero;
+    private bool attacked = false;
 //    private bool grounded = true;
 
 	float attackLen = .467f;
@@ -45,6 +48,8 @@ public class Controller : MonoBehaviour {
 		cam = GameObject.FindGameObjectWithTag ("MainCamera");
 		Debug.Log (anim.name /*["Attack"].length*/);
         AudioSource[] audSource = GetComponents<AudioSource> ();
+        tSinceAttack = attackDelay;
+
         if (healthBar == null)
             healthBar = GetComponentInChildren<Slider> ();
 
@@ -110,7 +115,10 @@ public class Controller : MonoBehaviour {
 	}
 
     void playerInput() {
-		if (Input.GetButtonDown ("Attack")) {
+        tSinceAttack += Time.deltaTime;
+
+		if (Input.GetButtonDown ("Attack") && tSinceAttack >= attackDelay) {
+            tSinceAttack = 0;
 			attack ();
 		}
 
@@ -184,6 +192,7 @@ public class Controller : MonoBehaviour {
 		anim.SetBool ("Idle", false);
         anim.SetTrigger ("Attack");
         attacking = true;
+        attacked = false;
 		Invoke ("stopAttack", attackLen);
 
         int slashIndex = Random.Range (0, slashes.Length);
@@ -258,6 +267,7 @@ public class Controller : MonoBehaviour {
 	void stopAttack() {
 		anim.SetBool ("Idle", true);
         attacking = false;
+        attacked = false;
 	}
 
     public bool getAttackState() {
@@ -298,6 +308,30 @@ public class Controller : MonoBehaviour {
             gameOver ();
 
         healthBar.value = hp;
+        float healthPer = hp / maxHp;
+/*
+        if (healthbarFill != null) {
+            Color b;
+
+            if (healthPer >= .66) {
+                b = Color.Lerp(new Color (1, 0, 0), new Color (0, 1, 0), (1 - healthPer) / .33);
+            } else if (healthPer < .66 && healthPer >= .33) {
+                b = new Color (0, 1, 0);
+            } else {
+                b = new Color (0, 0, 1);
+            }
+                
+            healthbarFill.color = b;
+        }
+*/
+    }
+
+    public bool getAttacked() {
+        return (attacked);
+    }
+
+    public void setAttacked(){
+        attacked = true;
     }
 
     public void gameOver() {
