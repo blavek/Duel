@@ -2,7 +2,9 @@
 using System.Collections;
 
 public class attack : MonoBehaviour {
-	Collider c;
+    public Controller player;
+
+    Collider c;
 //	public Animation anim;
 	// Use this for initialization
 	void Start () {
@@ -20,9 +22,8 @@ public class attack : MonoBehaviour {
 	}
 
 	void OnCollisionEnter (Collision col) {
-//		Debug.Log (col.gameObject.name);
-        bool attacking = GameObject.FindGameObjectWithTag ("pc").GetComponentInParent<Controller>().getAttackState ();
-//        player.getAttackState();
+//		Debug.Log (col.collider);
+        bool attacking = player.getAttackState ();
 
         if (attacking) {
             if (col.gameObject.GetComponent<enemyController> () != null)

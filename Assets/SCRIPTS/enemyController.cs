@@ -11,12 +11,19 @@ public class enemyController : MonoBehaviour {
 	public GameObject self;
 	int HP;
     public Slider healthBar;
+    bool alive;
+    public float deathAnimLength = 3f;
+    public HealthPickup vial;
+    public float dropPercentage = .2f;
 
 	Animator anim;
 
 	Vector3 relVec;
-	float attackLen = .7f;
-	float attacking = 0;
+	float attackLen = .533f;
+	bool attacking = false;
+    private bool drops = true;
+
+    private CharacterController charCont;
 
 	// Use this for initialization
 	void Start () {
@@ -25,19 +32,28 @@ public class enemyController : MonoBehaviour {
 		anim = GetComponent<Animator> ();
 		HP = startingHp;
         healthBar.maxValue = startingHp;
+        healthBar.minValue = 0;
         healthBar.value = HP;
+        alive = true;
+        charCont = GetComponent<CharacterController> ();
+        if (dropPercentage > 1 || dropPercentage < 0)
+            dropPercentage = 0;            
+
+        if (vial == null) {
+            drops = false;
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
-		relVec = pc.transform.position - transform.position;
-		if (attacking <= 0) {
-			rotate ();
-			move ();
-			attack ();
-		} else {
-			attacking -= Time.deltaTime;
-		}
+        if (isAlive ()) {
+            relVec = pc.transform.position - transform.position;
+            if (!attacking) {
+                rotate ();
+                move ();
+                attack ();
+            }
+        }
 	}
 
 	void rotate() {
@@ -49,8 +65,9 @@ public class enemyController : MonoBehaviour {
 
 	void move() {
 		if (relVec.magnitude <= chaseDist && relVec.magnitude > attackDist) {
-			float translation = speed * Time.deltaTime;
-			transform.Translate (new Vector3 (0, 0, translation));
+            float translation = speed;// * Time.deltaTime;
+            charCont.SimpleMove (transform.TransformDirection(Vector3.forward * translation));
+			//transform.Translate (new Vector3 (0, 0, translation));
 			anim.SetBool ("Idle", false);
 			anim.SetFloat ("Move", translation);
 		} else if (relVec.magnitude > chaseDist && relVec.magnitude > attackDist) {
@@ -65,12 +82,13 @@ public class enemyController : MonoBehaviour {
 		if (relVec.magnitude <= attackDist) {
 			anim.SetBool ("Idle", false);
 			anim.SetBool ("Attack", true);
-			attacking = attackLen;
+            attacking = true; //attackLen;
 			Invoke ("stopAttack", attackLen);
 		}
 	}
 
 	void stopAttack() {
+        attacking = false;
 		anim.SetBool ("Attack", false);
 		anim.SetBool ("Idle", true);
 	}
@@ -78,10 +96,39 @@ public class enemyController : MonoBehaviour {
 	public void damage (int dmg) {
 		HP -= dmg;
         healthBar.value = HP;
+        anim.SetTrigger ("Damaged");
 
 		if (HP <= 0) {
-			//Instantiate (self, new Vector3 (0, 0, 0), Quaternion.identity);
-			Destroy (gameObject);
+            gameObject.GetComponent<Animator>().enabled = false;
+
+//            healthBar.enabled = false;
+            if (healthBar.GetComponentInParent<Canvas> () != null)
+                healthBar.GetComponentInParent<Canvas> ().gameObject.SetActive (false);
+
+            Invoke ("stopRD", deathAnimLength);
+            gameObject.GetComponent<CapsuleCollider> ().enabled = false;
+            charCont.enabled = false;
+
+            if (drops && Random.value < dropPercentage)
+                Instantiate (vial, gameObject.transform.position, Random.rotation);
+
+            alive = false;
 		}
 	}
+
+    private void stopRD() {
+        Rigidbody[] rb = gameObject.GetComponentsInChildren<Rigidbody> ();
+
+        foreach (Rigidbody r in rb) {
+            r.isKinematic = true;
+        }
+    }
+
+    public bool getAttackState() {
+        return (attacking);
+    }
+
+    public bool isAlive() {
+        return (alive);
+    }
 }

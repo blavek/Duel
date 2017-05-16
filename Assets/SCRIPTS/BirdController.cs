@@ -64,7 +64,7 @@ public class BirdController : MonoBehaviour {
         RaycastHit hit;
 
         if (Physics.Raycast (transform.position, Vector3.down, out hit)) {
-			Debug.Log ("Land Ray height " + hit.distance + " height " + height);
+//			Debug.Log ("Land Ray height " + hit.distance + " height " + height);
 			if (hit.distance > 0) {
                 transform.position = new Vector3 (transform.position.x, transform.position.y - climbVel * Time.deltaTime, transform.position.z);
             }
@@ -77,7 +77,7 @@ public class BirdController : MonoBehaviour {
         anim.SetBool ("Flying", true);
         RaycastHit hit;
         if (Physics.Raycast (transform.position, Vector3.down, out hit)) {
-			Debug.Log ("Fly Ray height " + hit.distance + " height " + height); 
+//			Debug.Log ("Fly Ray height " + hit.distance + " height " + height); 
 			if (hit.distance < height) {
                 float y = transform.position.y + (climbVel * Time.deltaTime);
                 transform.position = new Vector3 (transform.position.x, y, transform.position.z);

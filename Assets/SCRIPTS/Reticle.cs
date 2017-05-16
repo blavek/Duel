@@ -15,7 +15,12 @@ public class Reticle : MonoBehaviour {
 	void Update () {
         if (target == null) {
             gameObject.SetActive (false);
-        } else {
+        } else if (target.GetComponent<enemyController> () != null) {
+            if (target.GetComponent<enemyController> ().isAlive ())
+                transform.position = target.transform.position + new Vector3(0, transform.lossyScale.y / 2, 0);
+            else
+                gameObject.SetActive (false);
+        } else {                
             transform.position = target.transform.position;
         }
 

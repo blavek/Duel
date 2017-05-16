@@ -20,19 +20,23 @@ public class PauseGame : MonoBehaviour {
         if (canvas.gameObject.activeInHierarchy == false) {
             canvas.gameObject.SetActive(true);
             Time.timeScale = 0;
-            GameObject.FindGameObjectWithTag ("pc").GetComponentInParent<Controller>().enabled = false;
+            GameObject.FindGameObjectWithTag ("pc").GetComponent<Controller>().enabled = false;
         } else {
             canvas.gameObject.SetActive(false);
             Time.timeScale = 1;
-            GameObject.FindGameObjectWithTag ("pc").GetComponentInParent<Controller>().enabled = true;
+            GameObject.FindGameObjectWithTag ("pc").GetComponent<Controller>().enabled = true;
         }
     }
 
     public void restartLevel() {
         Time.timeScale = 1;
-        GameObject.FindGameObjectWithTag ("pc").GetComponentInParent<Controller>().enabled = true;
+        GameObject.FindGameObjectWithTag ("pc").GetComponent<Controller>().enabled = true;
         SceneManager.LoadSceneAsync (SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
+
+	public void exitToMainMenu() {
+		SceneManager.LoadSceneAsync ("mainMenu", LoadSceneMode.Single);
+	}
 
     public void exitGame() {
         Application.Quit ();
